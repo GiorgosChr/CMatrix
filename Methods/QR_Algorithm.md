@@ -40,7 +40,7 @@ The QR algorithm is an iterative process that repeatedly applies the QR decompos
 
 1. Start with an initial matrix $A_0$, which is the original matrix $A$.
 2. Compute the QR decomposition: $A_k = Q_k \cdot R_k$.
-3. Update the matrix $$A$$: $A_{k+1} = R_k \cdot Q_k$.
+3. Update the matrix $A$: $A_{k+1} = R_k \cdot Q_k$.
 4. Repeat steps 2 and 3 until convergence is achieved.
 
 The convergence of the QR algorithm occurs when the off-diagonal elements of $A_k$ become sufficiently small.
@@ -67,7 +67,7 @@ To find the eigenvalues and eigenvectors using the QR method, we follow these st
 
 1. Initialize $A_0 = A$.
 2. Compute the QR decomposition: $A_0 = Q_0 \cdot R_0$.
-3. Update $$A$$: $A_1 = R_0 \cdot Q_0$.
+3. Update $A$: $A_1 = R_0 \cdot Q_0$.
 4. Repeat steps 2 and 3 until convergence.
 
 Let's perform the iterations:
