@@ -30,5 +30,13 @@ int main(){
         matrixOp.T();
         matrixOp.printMatrix();
         std::cout << std::endl;
+        double tr = matrixOp.trace();
+        std::cout << "Trace of matrixOp = " << tr << std::endl;
+        double dt = matrixOp.det();
+        std::cout << "Determinant of matrixOp = " << dt << std::endl;
+        matrixOp.absoluteVal();
+        matrixOp = matrixOp^(2);
+        matrixOp.printMatrix();
+        std::cout << std::endl;
         return 0;
 }

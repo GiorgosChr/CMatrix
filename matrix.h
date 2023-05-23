@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 class Matrix{
         private:
@@ -89,6 +90,61 @@ class Matrix{
                                         matrix[i][j] = temp.matrix[j][i];
                                 }
                         }
+                        std::swap(rows, cols);
+                }
+
+                double trace(){ // Calculates the trace of the matrix
+                        double trace = 0.0;
+                        for (size_t i = 0; i < rows; i++){
+                                for (size_t j = 0; j < cols; j++){
+                                        if (i == j){
+                                                trace += matrix[i][j];
+                                        }
+                                }
+                        }
+
+                        return trace;
+                }
+
+                double det(){ // Calculate the determinant
+                        if (rows != cols) {
+                                std::cout << "Error: The matrix is not square.\n";
+                                return 0.0;
+                        }
+                        if (rows == 1) { // For 1x1 matrix
+                                return matrix[0][0];
+                        }
+                        
+                        double determinant = 0.0;
+                        int sign = 1;
+                        Matrix submatrix(rows - 1, cols - 1);
+
+                        for (int col = 0; col < cols; ++col) {
+                                int subi = 0;
+                                for (int i = 1; i < rows; ++i) {
+                                        int subj = 0;
+                                        for (int j = 0; j < cols; ++j) {
+                                                if (j != col) {
+                                                        submatrix.matrix[subi][subj] = matrix[i][j];
+                                                        ++subj;
+                                                }
+                                        }
+                                        ++subi;
+                                }
+
+                                determinant += sign * matrix[0][col] * submatrix.det();
+                                sign = -sign;
+                        }
+
+                        return determinant;
+                }
+
+                void absoluteVal() { // Calculates the absolute value of each matrix element
+                        for (size_t i = 0; i < rows; i++) {
+                                for (size_t j = 0; j < cols; j++) {
+                                        matrix[i][j] = abs(matrix[i][j]);
+                                }
+                        }
                 }
 
                 // Operations between two matrices
@@ -161,6 +217,17 @@ class Matrix{
                 }
 
                 // Operations between matrices and scalars
+
+                Matrix operator^(double power){
+                        Matrix result(rows, cols);
+                        for (size_t i = 0; i < rows; i++) {
+                                for (size_t j = 0; j < cols; j++) {
+                                        result.matrix[i][j] = pow(matrix[i][j], power);
+                                }
+                        }
+
+                        return result;
+                }
 
                 Matrix operator+(double scalar) {
                         Matrix result(rows, cols);
