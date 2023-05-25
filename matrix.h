@@ -5,12 +5,28 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <random>
+
 
 class Matrix{
         private:
                 std::vector <std::vector<double>> matrix;
                 int rows, cols;
-        
+
+                std::vector<double> projection(std::vector<double> const& vectorV, std::vector<double> const& vectorU){
+                        std::vector<double> vectorProj;
+                        double dotProduct = 0.0;
+                        double norm = 0.0;
+                        for (size_t i = 0; i < vectorV.size(); i++){
+                                dotProduct += vectorU[i] * vectorV[i];
+                                norm += vectorU[i] * vectorU[i];
+                        }
+                        for (size_t i = 0; i < vectorV.size(); i++){
+                                vectorProj.push_back(dotProduct * vectorU[i]/norm);
+                        }
+
+                        return vectorProj;
+                }
         public:
                 // Constructor
                 Matrix(int x, int y){
@@ -139,13 +155,101 @@ class Matrix{
                         return determinant;
                 }
 
-                void absoluteVal() { // Calculates the absolute value of each matrix element
+                void absoluteVal(){ // Calculates the absolute value of each matrix element
                         for (size_t i = 0; i < rows; i++) {
                                 for (size_t j = 0; j < cols; j++) {
                                         matrix[i][j] = abs(matrix[i][j]);
                                 }
                         }
                 }
+
+                void orthogonalize(){ // Modified Gram-Schmidt orthogonalization
+                        Matrix matrixOld(rows, cols);
+                        matrixOld.matrix = matrix;
+                        std::vector<std::vector<double>> vectorsOld;
+                        for (size_t k = 0; k < cols; k++){ // Store all vectors in a 2d vector
+                                std::vector<double> vectorV; // The old vector
+                                for (size_t i = 0; i < rows; i++){
+                                        vectorV.push_back(matrixOld.matrix[i][k]);
+                                }
+                                vectorsOld.push_back(vectorV);
+                        }
+                        for (size_t k = 0; k < cols; k++){ // Calculate the orthogonalized vectors
+                                std::vector<double> vectorU; // The new vector
+                                for (size_t i = 0; i < vectorsOld[k].size(); i++){
+                                        vectorU.push_back(vectorsOld[k][i]);
+                                }
+                                if (k > 0){
+                                        for (size_t kPrime = 0; kPrime < k; kPrime++){
+                                                std::vector<double> vectorPrev;
+                                                for (size_t i = 0; i < vectorsOld[k -1].size(); i++){
+                                                        vectorPrev.push_back(matrixOld.matrix[i][k - 1]);
+                                                }
+                                                std::vector<double> proj = projection(vectorU, vectorPrev);
+                                                for (size_t i = 0; i < vectorU.size(); i++){
+                                                        vectorU[i] -= proj[i];
+                                                }
+                                        }
+                                }
+                                for (size_t i = 0; i < rows; i++){
+                                        matrix[i][k] = vectorU[i];
+                                }
+                        }
+                }
+
+
+
+
+                std::vector<double> eigenValues(double tol = pow(10, -10)){ // Calculates the eigenvalues of a matrix and returns them as vector components
+                        Matrix eigenMatrix(rows, cols);
+                        Matrix matrixQ(rows, cols), matrixR(rows, cols);
+                        Matrix matrixA(rows, cols);
+                        Matrix matrixAPrev(rows, cols);
+                        Matrix matrixTemp(rows, cols);
+                        std::vector<double> eigenValues;
+                        double diff = 2.0 * tol; // Difference between the matrix elements of the matrix A after each iteration
+                        
+                        matrixA.matrix = matrix;
+                        matrixTemp.matrix = matrix;
+                        // RNG setup
+                        std::random_device rd;
+                        std::mt19937 gen(rd());
+                        std::uniform_real_distribution<double> dist(0.0, 1.0);
+
+                        matrixTemp.orthogonalize();
+                        matrixTemp.printMatrix();
+                        matrixQ.matrix = matrixTemp.matrix;
+                        matrixTemp.T();
+                        matrixR = matrixTemp.dot(matrixA);
+                        
+                        while (diff > tol){
+                                matrixAPrev.matrix = matrixA.matrix;
+                                matrixA = matrixR.dot(matrixQ);
+                                
+                                double sum = 0.0;
+                                for (size_t i = 0; i < rows; i++){
+                                        for (size_t j = 0; j < cols; j++){
+                                                sum += abs(matrixA.matrix[i][j] - matrixAPrev.matrix[i][j]);
+                                        }
+                                }
+                                // std::cout << sum << std::endl;
+                                diff = sum;
+                                matrixTemp.matrix = matrixA.matrix;
+                                matrixTemp.orthogonalize();
+                                matrixQ.matrix = matrixTemp.matrix;
+                                matrixTemp.T();
+                                matrixR = matrixTemp.dot(matrixA);
+                        }
+                
+
+
+                        
+                        for (size_t i = 0; i < rows; i++){
+                                eigenValues.push_back(matrixA.matrix[i][i]);
+                        }
+                        return eigenValues;
+                }
+
 
                 // Operations between two matrices
 
@@ -316,6 +420,7 @@ class Matrix{
 
                         return result;
                 }
+
 };
 
 

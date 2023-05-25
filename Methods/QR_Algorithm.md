@@ -20,7 +20,7 @@ The QR method is an iterative numerical algorithm used to find the eigenvalues a
 
 ## 1. Introduction
 
-The eigenvalue problem for a matrix A can be written as:
+The eigenvalue problem for a matrix $A$ can be written as:
 
 $$A \cdot x = \lambda \cdot x$$
 
@@ -28,7 +28,7 @@ where $A$ is the matrix, $x$ is the eigenvector, and $\lambda$ is the correspond
 
 ## 2. QR Decomposition
 
-The first step in the QR method is to decompose the matrix $A$ into the product of two matrices: $Q$ and $$R$. The QR decomposition can be expressed as:
+The first step in the QR method is to decompose the matrix $A$ into the product of two matrices: $Q$ and $R$. The QR decomposition can be expressed as:
 
 $$A = Q \cdot R$$
 
@@ -85,7 +85,7 @@ Updated matrix:
 
 $$A_1 = R_0 \cdot Q_0 = \begin{bmatrix} 2.828 & 2.828 \\ 0 & -0.447 \end{bmatrix}$$
 
-### Iteration 2:$$
+### Iteration 2:
 
 $$A_1 = \begin{bmatrix} 2.828 & 2.828 \\ 0 & -0.447 \end{bmatrix}$$
 

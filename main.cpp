@@ -6,37 +6,28 @@
 #include "matrix.h"
 
 int main(){
-        Matrix matrixOne(4, 4);
-        Matrix matrixTwo(4, 4);
-        Matrix matrixOp(4, 4);
+        int n = 3;
+        Matrix matrixOne(n, n);
+        Matrix matrixTwo(n, n);
+        Matrix matrixOp(n, n);
         // matrix.printMatrix();
 
-        for (int i = 0; i < 4; i++){
-                for (int j = 0; j < 4; j++){
+        for (int i = 0; i < n; i++){
+                for (int j = 0; j < n; j++){
                         matrixOne.setElement(i, j, i + j);
                         matrixTwo.setElement(i, j, i - j);
                 }
         }
-        matrixOne.printMatrix();
-        std::cout << std::endl;
-
-        matrixTwo.printMatrix();
-        std::cout << std::endl;
         
-        matrixOp = matrixTwo.dot(matrixOne);
-        matrixOp.printMatrix();
-        std::cout << std::endl;
-
-        matrixOp.T();
-        matrixOp.printMatrix();
-        std::cout << std::endl;
-        double tr = matrixOp.trace();
-        std::cout << "Trace of matrixOp = " << tr << std::endl;
-        double dt = matrixOp.det();
-        std::cout << "Determinant of matrixOp = " << dt << std::endl;
-        matrixOp.absoluteVal();
-        matrixOp = matrixOp^(2);
-        matrixOp.printMatrix();
-        std::cout << std::endl;
+        std::cout << "Initial Matrix A: " << std::endl;
+        matrixOne.printMatrix();
+        std::cout << "Orthogonalized Matrix Q: " << std::endl;
+        matrixOne.orthogonalize();
+        matrixOne.printMatrix();
+        // std::vector<double> testVector;
+        // testVector = matrixOne.eigenValues();
+        // for (size_t i = 0; i < n; i++){
+        //         std::cout << testVector[i] << " " << std::endl;
+        // }
         return 0;
 }
